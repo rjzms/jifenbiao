@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>程小宝日常积分表</title>
+
+<style>
+:root{
+	--primary:#2196F3;
+	--primary2:#42a5f5;
+	--danger:#f44336;
+}
+
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+	-webkit-tap-highlight-color:transparent;
+}
+
+
+
+body{
+	font-family:
+		-apple-system,
+		BlinkMacSystemFont,
+		"PingFang SC",
+		"Microsoft YaHei",
+		sans-serif;
+	background:linear-gradient(135deg,#a1c4fd 0%,#c2e9fb 100%);
+	min-height:100vh;
+	padding:10px;
+	color:#222;
+}
+
+.container{
+	width:100%;
+	max-width:520px;
+	margin:0 auto;
+	background:#fff;
+	border-radius:24px;
+	overflow:hidden;
+	box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+header{
+	background:linear-gradient(90deg,var(--primary),var(--primary2));
+	color:#fff;
+	text-align:center;
+	padding:24px 16px;
+}
+
+header h1{
+	font-size:28px;
+	font-weight:800;
+	margin-bottom:8px;
+}
+
+.subtitle{
+	opacity:.95;
+	font-size:14px;
+}
+
+.week-info{
+	padding:16px;
+	background:#eaf5ff;
+}
+
+.date-input,
+.week-select{
+	width:100%;
+	margin-top:8px;
+	padding:12px;
+	border:none;
+	border-radius:14px;
+	background:#fff;
+	font-size:16px;
+}
+
+.total-score{
+	margin-top:16px;
+	background:#fff;
+	border-radius:18px;
+	text-align:center;
+	padding:18px;
+}
+
+.total-value{
+	font-size:44px;
+	font-weight:800;
+	color:var(--primary);
+	margin:6px 0;
+}
+
+.tabs{
+	display:flex;
+	background:#f7f9fc;
+}
+
+.tab{
+	flex:1;
+	text-align:center;
+	padding:15px 8px;
+	font-size:15px;
+	font-weight:700;
+	color:#666;
+}
+
+.tab.active{
+	background:#fff;
+	color:var(--primary);
+	border-bottom:4px solid var(--primary);
+}
+
+.content{
+	padding:14px;
+}
+
+table{
+	width:100%;
+	border-collapse:collapse;
+}
+
+th{
+	background:#f7fbff;
+	color:#555;
+	font-size:14px;
+	padding:12px 8px;
+	text-align:left;
+}
+
+td{
+	border-bottom:1px solid #f0f0f0;
+	padding:14px 8px;
+	vertical-align:middle;
+	font-size:14px;
+}
+
+.item-name{
+	line-height:1.5;
+	word-break:break-all;
+}
+
+.point-add{
+	color:var(--primary);
+	font-weight:800;
+}
+
+.point-minus{
+	color:var(--danger);
+	font-weight:800;
+}
+
+.score-btn{
+	width:46px;
+	height:46px;
+	border:none;
+	border-radius:50%;
+	color:#fff;
+	font-size:24px;
+	font-weight:700;
+}
+
+.add-btn{
+	background:var(--primary);
+}
+
+.minus-btn{
+	background:var(--danger);
+}
+
+.custom-add{
+	margin-top:18px;
+	display:flex;
+	flex-direction:column;
+	gap:10px;
+}
+
+.custom-add input{
+	width:100%;
+	padding:13px 14px;
+	border-radius:14px;
+	border:1px solid #ddd;
+	font-size:16px;
+}
+
+.action-btn{
+	border:none;
+	padding:14px;
+	border-radius:14px;
+	color:#fff;
+	font-size:15px;
+	font-weight:700;
+}
+
+.primary-btn{
+	background:var(--primary);
+}
+
+.danger-btn{
+	background:var(--danger);
+}
+
+.record-item{
+	background:#f8fbff;
+	border-radius:18px;
+	padding:14px;
+	margin-bottom:12px;
+	display:flex;
+	justify-content:space-between;
+	gap:10px;
+	align-items:center;
+}
+
+.record-name{
+	font-weight:700;
+	line-height:1.5;
+}
+
+.record-score{
+	font-size:24px;
+	font-weight:800;
+}
+
+.delete-btn{
+	width:34px;
+	height:34px;
+	border:none;
+	border-radius:50%;
+	background:#ff5252;
+	color:#fff;
+	font-size:20px;
+}
+
+.daily-grid{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	gap:12px;
+	margin-top:12px;
+}
+
+.day-card{
+	background:#fff;
+	border-radius:18px;
+	padding:16px 10px;
+	text-align:center;
+	box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.day-card.today{
+	border:3px solid var(--primary);
+}
+
+.day-score{
+	font-size:32px;
+	font-weight:800;
+	margin:8px 0;
+}
+
+.remark{
+	margin:14px;
+	background:#f2f8ff;
+	border-left:5px solid var(--primary);
+	border-radius:16px;
+	padding:18px;
+	line-height:1.8;
+	font-size:14px;
+}
+
+.small-delete{
+	margin-top:8px;
+	border:none;
+	background:#ff5252;
+	color:#fff;
+	padding:6px 10px;
+	border-radius:10px;
+	font-size:12px;
+}
+
+.empty{
+	text-align:center;
+	color:#888;
+	padding:40px 0;
+}
+
+.clear-all-btn{
+ position:fixed;
+ right:18px;
+ bottom:22px;
+ width:72px;
+ height:72px;
+ border:none;
+ border-radius:50%;
+ background:linear-gradient(135deg,#ff4d4f,#ff7875);
+ color:#fff;
+ font-size:16px;
+ font-weight:800;
+ box-shadow:0 8px 20px rgba(255,77,79,.35);
+ z-index:999;
+}
+
+.clear-all-btn:active{
+ transform:scale(.96);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+	<h1>程小宝日常积分表</h1>
+	<div class="subtitle">坚持好习惯 · 收获好奖励</div>
+</header>
+
+<div class="week-info">
+
+	<label>选择周起始日期</label>
+
+	<input
+		type="date"
+		id="startDate"
+		class="date-input"
+		onchange="loadWeek()"
+	>
+
+	<select
+		id="weekHistory"
+		class="week-select"
+		onchange="switchWeekHistory()"
+	>
+		<option value="">📚 历史周记录</option>
+	</select>
+
+	<div class="total-score">
+		<div id="currentWeekName">第1周</div>
+
+		<div class="total-value" id="totalScore">0</div>
+
+		<div>目标 ≥ 25 分</div>
+	</div>
+
+</div>
+
+<div class="tabs">
+	<div class="tab active" onclick="switchTab(0)">加分项</div>
+	<div class="tab" onclick="switchTab(1)">扣分项</div>
+	<div class="tab" onclick="switchTab(2)">记录</div>
+</div>
+
+<div class="content" id="addContent">
+
+	<table id="addTable">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>项目</th>
+				<th>分值</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<div class="custom-add">
+
+		<input
+			type="text"
+			id="newAddName"
+			placeholder="新增加分项目"
+		>
+
+		<input
+			type="number"
+			id="newAddPoints"
+			placeholder="分值"
+		>
+
+		<button
+			class="action-btn primary-btn"
+			onclick="addCustomItem(true)"
+		>
+			添加加分项
+		</button>
+
+	</div>
+
+</div>
+
+<div class="content" id="minusContent" style="display:none">
+
+	<table id="minusTable">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>项目</th>
+				<th>扣分</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+
+	<div class="custom-add">
+
+		<input
+			type="text"
+			id="newMinusName"
+			placeholder="新增扣分项目"
+		>
+
+		<input
+			type="number"
+			id="newMinusPoints"
+			placeholder="扣分"
+		>
+
+		<button
+			class="action-btn danger-btn"
+			onclick="addCustomItem(false)"
+		>
+			添加扣分项
+		</button>
+
+	</div>
+
+</div>
+
+<div class="content" id="summaryContent" style="display:none">
+
+	<h3>今日操作记录</h3>
+
+	<div id="todayRecords"></div>
+
+	<h3 style="margin-top:24px;">本周每日汇总</h3>
+
+	<div class="daily-grid" id="dailyGrid"></div>
+
+</div>
+
+<div class="remark">
+
+<strong>📋 奖励规则</strong>
+
+<br><br>
+
+周一至周五累计积分达到 <strong>25分</strong>，可获得：
+
+<br>
+
+• 周六、周日各看 <strong>1小时</strong> 电视
+
+<br>
+
+• 可购买不超过 <strong>20元</strong> 的礼物
+
+<br><br>
+
+<strong>不满25分，奖励全部取消。</strong>
+
+</div>
+
+</div>
+
+<button
+ class="clear-all-btn"
+ onclick="clearAllData()"
+>
+ 清空
+</button>
+
+
+<script>
+
+/* =========================
+   修复后的核心逻辑
+   只需要替换你原来的 <script> 整块即可
+   ========================= */
+
+let currentWeekStart = null;
+
+let currentWeekKey = "";
+
+let weekData = {};
+
+let allWeeksData = {};
+
+let weekMap = {};
+
+let customAdd = [];
+
+let customMinus = [];
+
+let customId = Date.now();
+
+/* 当前真正所在周 */
+let currentViewingWeek = "";
+
+/* 默认项目 */
+const defaultAdd = [
+ {id:1,name:"早上按时起床",points:1},
+ {id:2,name:"按时吃饭晨读",points:1},
+ {id:3,name:"上学不迟到",points:0.5},
+ {id:4,name:"主动做作业",points:2},
+ {id:5,name:"好好说话",points:1},
+ {id:6,name:"完成运动作业",points:1},
+ {id:7,name:"文明讲话",points:1},
+ {id:8,name:"阅读20分钟",points:2},
+ {id:9,name:"认真听讲",points:2},
+ {id:10,name:"整理物品",points:1},
+ {id:11,name:"按时睡觉",points:1},
+ {id:12,name:"主动打招呼",points:1},
+ {id:13,name:"帮忙做家务",points:1}
+];
+
+const defaultMinus = [
+ {id:1,name:"起床拖拉",points:-2},
+ {id:2,name:"不主动写作业",points:-3},
+ {id:3,name:"乱丢乱放",points:-2},
+ {id:4,name:"被老师批评",points:-3},
+ {id:5,name:"讲脏话",points:-1},
+ {id:6,name:"作业未完成",points:-3}
+];
+
+function getTodayKey(){
+
+ return new Date().toLocaleDateString('sv-SE');
+}
+
+function formatDate(d){
+
+ return d.toLocaleDateString('sv-SE');
+}
+
+/* 每周唯一key */
+function getWeekKey(date){
+
+ const d = new Date(date);
+
+ let day = d.getDay();
+
+ let diff = day === 0 ? -6 : 1 - day;
+
+ d.setDate(d.getDate() + diff);
+
+ return formatDate(d);
+}
+
+/* 修复重点：
+   只有真正新的一周才会创建“第X周”
+*/
+function getWeekName(key){
+
+ if(!weekMap[key]){
+
+  const usedWeeks = Object.keys(weekMap).length + 1;
+
+  weekMap[key] = `第${usedWeeks}周`;
+
+  localStorage.setItem(
+   "weekMap",
+   JSON.stringify(weekMap)
+  );
+ }
+
+ return weekMap[key];
+}
+
+function saveCurrentWeek(){
+
+ allWeeksData[currentWeekKey] = JSON.parse(
+  JSON.stringify(weekData)
+ );
+
+ localStorage.setItem(
+  "allWeeksData",
+  JSON.stringify(allWeeksData)
+ );
+}
+
+function loadWeek(){
+
+ let val = document.getElementById(
+  "startDate"
+ ).value;
+
+ currentWeekStart = val
+  ? new Date(val)
+  : new Date();
+
+ currentWeekKey = getWeekKey(
+  currentWeekStart
+ );
+
+ currentViewingWeek = currentWeekKey;
+
+ if(!allWeeksData[currentWeekKey]){
+
+  allWeeksData[currentWeekKey] = {};
+ }
+
+ weekData = allWeeksData[currentWeekKey];
+
+ getWeekName(currentWeekKey);
+
+ saveCurrentWeek();
+
+ updateWeekHistory();
+
+ document.getElementById(
+  "currentWeekName"
+ ).textContent = getWeekName(currentWeekKey);
+
+ renderAll();
+}
+
+function updateWeekHistory(){
+
+ const select = document.getElementById(
+  "weekHistory"
+ );
+
+ select.innerHTML =
+  '<option value="">📚 历史周记录</option>';
+
+ Object.keys(weekMap)
+ .forEach(key=>{
+
+  const option =
+   document.createElement("option");
+
+  option.value = key;
+
+  option.textContent = getWeekName(key);
+
+  select.appendChild(option);
+ });
+}
+
+function switchWeekHistory(){
+
+ const key = document.getElementById(
+  "weekHistory"
+ ).value;
+
+ if(!key) return;
+
+ currentViewingWeek = key;
+
+ currentWeekKey = key;
+
+ weekData = allWeeksData[key] || {};
+
+ document.getElementById(
+  "currentWeekName"
+ ).textContent = getWeekName(key);
+
+ renderAll();
+}
+
+function getWeekDays(){
+
+ let days = [];
+
+ let start = new Date(currentWeekKey);
+
+ for(let i=0;i<7;i++){
+
+  let d = new Date(start);
+
+  d.setDate(d.getDate()+i);
+
+  days.push(formatDate(d));
+ }
+
+ return days;
+}
+
+function updateTotal(dateKey,delta){
+
+ if(!weekData[dateKey]){
+
+  weekData[dateKey] = {
+   total:0,
+   records:[]
+  };
+ }
+
+ weekData[dateKey].total += delta;
+
+ saveCurrentWeek();
+
+ renderAll();
+}
+
+function recordAction(dateKey,item){
+
+ if(!weekData[dateKey]){
+
+  weekData[dateKey] = {
+   total:0,
+   records:[]
+  };
+ }
+
+ weekData[dateKey].records.push({
+
+  id:Date.now()+Math.random(),
+
+  time:new Date().toLocaleTimeString(
+   'zh-CN',
+   {
+	hour:'2-digit',
+	minute:'2-digit'
+   }
+  ),
+
+  name:item.name,
+
+  points:item.points
+ });
+
+ saveCurrentWeek();
+}
+
+function handleAction(item){
+
+ const today = getTodayKey();
+
+ /* 获取当前正在查看周的7天 */
+ const days = getWeekDays();
+
+ /* 默认记录到当前查看周的第一天 */
+ let targetDate = days[0];
+
+ /* 如果今天属于当前查看周 */
+ if(days.includes(today)){
+
+  targetDate = today;
+
+ }else{
+
+  /* 不属于当前周时：
+	 自动记录到该周最后一天有记录的日期
+	 如果都没有记录，则记录到周一
+  */
+
+  let found = false;
+
+  for(let i=6;i>=0;i--){
+
+   const d = days[i];
+
+   if(weekData[d]){
+
+	targetDate = d;
+
+	found = true;
+
+	break;
+   }
+  }
+
+  if(!found){
+
+   targetDate = days[0];
+  }
+ }
+
+ updateTotal(targetDate,item.points);
+
+ recordAction(targetDate,item);
+}
+function deleteRecord(dateKey,recordId){
+
+ if(!weekData[dateKey]) return;
+
+ const index =
+  weekData[dateKey].records.findIndex(
+   r => r.id === recordId
+  );
+
+ if(index > -1){
+
+  updateTotal(
+   dateKey,
+   -weekData[dateKey].records[index].points
+  );
+
+  weekData[dateKey].records.splice(index,1);
+
+  saveCurrentWeek();
+
+  renderAll();
+ }
+}
+
+function deleteCustomAdd(id){
+
+ customAdd = customAdd.filter(
+  item => item.id !== id
+ );
+
+ saveCustom();
+
+ renderAddTable();
+}
+
+function deleteCustomMinus(id){
+
+ customMinus = customMinus.filter(
+  item => item.id !== id
+ );
+
+ saveCustom();
+
+ renderMinusTable();
+}
+
+/* 下面渲染逻辑保持不变 */
+
+function renderAddTable(){
+
+ const tbody =
+  document.querySelector("#addTable tbody");
+
+ tbody.innerHTML = "";
+
+ [...defaultAdd,...customAdd]
+ .forEach((item,index)=>{
+
+  const tr =
+   document.createElement("tr");
+
+  tr.innerHTML = `
+   <td>${index+1}</td>
+
+   <td class="item-name">
+
+	${item.name}
+
+	${
+	 index >= defaultAdd.length
+	 ?
+	 `
+	 <br>
+
+	 <button
+	  class="small-delete"
+	  onclick="deleteCustomAdd(${item.id})"
+	 >
+	  删除
+	 </button>
+	 `
+	 :
+	 ''
+	}
+
+   </td>
+
+   <td class="point-add">
+	+${item.points}
+   </td>
+
+   <td></td>
+  `;
+
+  const btn =
+   document.createElement("button");
+
+  btn.className =
+   "score-btn add-btn";
+
+  btn.textContent = "+";
+
+  btn.onclick =
+   ()=>handleAction(item);
+
+  tr.lastElementChild.appendChild(btn);
+
+  tbody.appendChild(tr);
+ });
+}
+
+function renderMinusTable(){
+
+ const tbody =
+  document.querySelector("#minusTable tbody");
+
+ tbody.innerHTML = "";
+
+ [...defaultMinus,...customMinus]
+ .forEach((item,index)=>{
+
+  const tr =
+   document.createElement("tr");
+
+  tr.innerHTML = `
+   <td>${index+1}</td>
+
+   <td class="item-name">
+
+	${item.name}
+
+	${
+	 index >= defaultMinus.length
+	 ?
+	 `
+	 <br>
+
+	 <button
+	  class="small-delete"
+	  onclick="deleteCustomMinus(${item.id})"
+	 >
+	  删除
+	 </button>
+	 `
+	 :
+	 ''
+	}
+
+   </td>
+
+   <td class="point-minus">
+	${item.points}
+   </td>
+
+   <td></td>
+  `;
+
+  const btn =
+   document.createElement("button");
+
+  btn.className =
+   "score-btn minus-btn";
+
+  btn.textContent = "-";
+
+  btn.onclick =
+   ()=>handleAction(item);
+
+  tr.lastElementChild.appendChild(btn);
+
+  tbody.appendChild(tr);
+ });
+}
+
+function renderTodayRecords(){
+
+ const container =
+  document.getElementById(
+   "todayRecords"
+  );
+
+ container.innerHTML = "";
+
+ /* 当前查看周的7天 */
+ const days = getWeekDays();
+
+ /* 默认显示周一 */
+ let currentDate = days[0];
+
+ /* 优先显示最后一个有记录的日期 */
+ for(let i=6;i>=0;i--){
+
+  if(
+   weekData[days[i]] &&
+   weekData[days[i]].records &&
+   weekData[days[i]].records.length > 0
+  ){
+
+   currentDate = days[i];
+
+   break;
+  }
+ }
+
+ const data =
+  weekData[currentDate] || {records:[]};
+
+ if(data.records.length === 0){
+
+  container.innerHTML =
+   '<div class="empty">今天还没有记录～</div>';
+
+  return;
+ }
+
+ data.records.forEach(rec=>{
+
+  const item =
+   document.createElement("div");
+
+  item.className = "record-item";
+
+  item.innerHTML = `
+   <div>
+
+	<div style="font-size:12px;color:#888;">
+	 ${currentDate}
+	 &nbsp;
+	 ${rec.time}
+	</div>
+
+	<div class="record-name">
+	 ${rec.name}
+	</div>
+
+   </div>
+
+   <div style="display:flex;align-items:center;gap:10px;">
+
+	<div
+	 class="record-score"
+	 style="color:${rec.points>0?'#2196F3':'#f44336'}"
+	>
+	 ${rec.points>0?'+':''}${rec.points}
+	</div>
+
+	<button
+	 class="delete-btn"
+	 onclick="deleteRecord('${currentDate}',${rec.id})"
+	>
+	 ×
+	</button>
+
+   </div>
+  `;
+
+  container.appendChild(item);
+ });
+}
+
+function renderDailyGrid(){
+
+ const container =
+  document.getElementById("dailyGrid");
+
+ container.innerHTML = "";
+
+ const days = getWeekDays();
+
+ const names = [
+  "周一","周二","周三",
+  "周四","周五","周六","周日"
+ ];
+
+ days.forEach((date,i)=>{
+
+  const total =
+   weekData[date]
+   ? weekData[date].total || 0
+   : 0;
+
+  const card =
+   document.createElement("div");
+
+  card.className =
+   `day-card ${
+	date===getTodayKey()
+	? 'today'
+	: ''
+   }`;
+
+  card.innerHTML = `
+   <div>${names[i]}</div>
+
+   <div
+	class="day-score"
+	style="color:${total>=0?'#2196F3':'#f44336'}"
+   >
+	${total}
+   </div>
+
+   <div style="font-size:12px;color:#999;">
+	${date.slice(5)}
+   </div>
+  `;
+
+  container.appendChild(card);
+ });
+}
+
+function renderAll(){
+
+ let total = 0;
+
+ Object.values(weekData).forEach(d=>{
+
+  total += d.total || 0;
+ });
+
+ document.getElementById(
+  "totalScore"
+ ).textContent = total.toFixed(1);
+
+ renderTodayRecords();
+
+ renderDailyGrid();
+}
+
+function switchTab(n){
+
+ document.querySelectorAll(".tab")
+ .forEach((t,i)=>{
+
+  t.classList.toggle("active",i===n);
+ });
+
+ document.getElementById(
+  "addContent"
+ ).style.display =
+  n===0 ? "block" : "none";
+
+ document.getElementById(
+  "minusContent"
+ ).style.display =
+  n===1 ? "block" : "none";
+
+ document.getElementById(
+  "summaryContent"
+ ).style.display =
+  n===2 ? "block" : "none";
+
+ if(n===2){
+
+  renderAll();
+ }
+}
+
+function addCustomItem(isAdd){
+
+ const nameEl =
+  document.getElementById(
+   isAdd
+   ? "newAddName"
+   : "newMinusName"
+  );
+
+ const pointsEl =
+  document.getElementById(
+   isAdd
+   ? "newAddPoints"
+   : "newMinusPoints"
+  );
+
+ const name = nameEl.value.trim();
+
+ let points = parseFloat(pointsEl.value);
+
+ if(!name || isNaN(points)){
+
+  alert("请填写完整信息");
+
+  return;
+ }
+
+ if(!isAdd){
+
+  points = -Math.abs(points);
+ }
+
+ const obj = {
+
+  id:++customId,
+
+  name,
+
+  points
+ };
+
+ if(isAdd){
+
+  customAdd.push(obj);
+
+ }else{
+
+  customMinus.push(obj);
+ }
+
+ saveCustom();
+
+ renderAddTable();
+
+ renderMinusTable();
+
+ nameEl.value = "";
+
+ pointsEl.value = "";
+}
+
+function saveCustom(){
+
+ localStorage.setItem(
+  "customAddMobile",
+  JSON.stringify(customAdd)
+ );
+
+ localStorage.setItem(
+  "customMinusMobile",
+  JSON.stringify(customMinus)
+ );
+}
+
+function loadData(){
+
+ allWeeksData = JSON.parse(
+  localStorage.getItem(
+   "allWeeksData"
+  ) || "{}"
+ );
+
+ weekMap = JSON.parse(
+  localStorage.getItem(
+   "weekMap"
+  ) || "{}"
+ );
+
+ customAdd = JSON.parse(
+  localStorage.getItem(
+   "customAddMobile"
+  ) || "[]"
+ );
+
+ customMinus = JSON.parse(
+  localStorage.getItem(
+   "customMinusMobile"
+  ) || "[]"
+ );
+}
+
+window.onload = ()=>{
+
+ loadData();
+
+ renderAddTable();
+
+ renderMinusTable();
+
+ /* 今天 */
+ const today = new Date();
+
+ /* 自动定位当前周 */
+ const autoWeekKey = getWeekKey(today);
+
+ /* 如果这一周不存在 */
+ if(!allWeeksData[autoWeekKey]){
+
+  allWeeksData[autoWeekKey] = {};
+ }
+
+ /* 自动创建周名称 */
+ getWeekName(autoWeekKey);
+
+ /* 当前周 */
+ currentWeekKey = autoWeekKey;
+
+ currentViewingWeek = autoWeekKey;
+
+ currentWeekStart = new Date(autoWeekKey);
+
+ weekData = allWeeksData[autoWeekKey];
+
+ /* 日期选择器同步 */
+ document.getElementById(
+  "startDate"
+ ).value = autoWeekKey;
+
+ /* 保存 */
+ saveCurrentWeek();
+
+ /* 更新历史周 */
+ updateWeekHistory();
+
+ /* 更新标题 */
+ document.getElementById(
+  "currentWeekName"
+ ).textContent =
+  getWeekName(autoWeekKey);
+
+ /* 渲染 */
+ renderAll();
+};
+
+function clearAllData(){
+
+ const ok = confirm(
+  "确定清空所有周记录、积分、历史、加分项和扣分项吗？"
+ );
+
+ if(!ok) return;
+
+ localStorage.removeItem("allWeeksData");
+
+ localStorage.removeItem("weekMap");
+
+ localStorage.removeItem("customAddMobile");
+
+ localStorage.removeItem("customMinusMobile");
+
+ location.reload();
+}
+
+
+
+</script>
+</body>
+</html>
