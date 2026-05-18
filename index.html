@@ -304,6 +304,77 @@ td{
  transform:scale(.96);
 }
 
+.reward-mask{
+ position:fixed;
+ inset:0;
+ background:rgba(0,0,0,.45);
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ z-index:99999;
+ animation:fadeIn .25s ease;
+}
+
+.reward-box{
+ width:88%;
+ max-width:360px;
+ background:#fff;
+ border-radius:30px;
+ padding:30px 24px;
+ text-align:center;
+ animation:pop .35s ease;
+ box-shadow:0 20px 50px rgba(0,0,0,.2);
+}
+
+.reward-emoji{
+ font-size:72px;
+ margin-bottom:10px;
+}
+
+.reward-title{
+ font-size:30px;
+ font-weight:800;
+ color:#ff9800;
+ margin-bottom:10px;
+}
+
+.reward-text{
+ font-size:16px;
+ line-height:1.8;
+ color:#555;
+}
+
+.reward-btn{
+ margin-top:22px;
+ border:none;
+ background:linear-gradient(135deg,#ff9800,#ffb74d);
+ color:#fff;
+ font-size:18px;
+ font-weight:800;
+ padding:14px 30px;
+ border-radius:999px;
+}
+
+@keyframes pop{
+ from{
+  transform:scale(.7);
+  opacity:0;
+ }
+ to{
+  transform:scale(1);
+  opacity:1;
+ }
+}
+
+@keyframes fadeIn{
+ from{
+  opacity:0;
+ }
+ to{
+  opacity:1;
+ }
+}
+
 </style>
 </head>
 
@@ -499,6 +570,10 @@ let customId = Date.now();
 /* 当前真正所在周 */
 let currentViewingWeek = "";
 
+let currentSelectedDate = "";
+
+let rewardShownWeeks = {};
+
 /* 默认项目 */
 const defaultAdd = [
 
@@ -616,6 +691,8 @@ function loadWeek(){
  );
 
  currentViewingWeek = currentWeekKey;
+ 
+ currentSelectedDate = val || getTodayKey();
 
  if(!allWeeksData[currentWeekKey]){
 
@@ -669,6 +746,8 @@ function switchWeekHistory(){
  if(!key) return;
 
  currentViewingWeek = key;
+ 
+ currentSelectedDate = key;
 
  currentWeekKey = key;
 
@@ -748,7 +827,9 @@ function recordAction(dateKey,item){
 
 function handleAction(item){
 
- const today = getTodayKey();
+ const today = currentSelectedDate || getTodayKey();
+ 
+ 
 
  /* 获取当前正在查看周的7天 */
  const days = getWeekDays();
@@ -981,22 +1062,9 @@ function renderTodayRecords(){
  const days = getWeekDays();
 
  /* 默认显示周一 */
- let currentDate = days[0];
+ let currentDate = currentSelectedDate || days[0];
 
- /* 优先显示最后一个有记录的日期 */
- for(let i=6;i>=0;i--){
-
-  if(
-   weekData[days[i]] &&
-   weekData[days[i]].records &&
-   weekData[days[i]].records.length > 0
-  ){
-
-   currentDate = days[i];
-
-   break;
-  }
- }
+ 
 
  const data =
   weekData[currentDate] || {records:[]};
@@ -1080,7 +1148,7 @@ function renderDailyGrid(){
 
   card.className =
    `day-card ${
-	date===getTodayKey()
+	date===currentSelectedDate
 	? 'today'
 	: ''
    }`;
@@ -1120,6 +1188,9 @@ function renderAll(){
  renderTodayRecords();
 
  renderDailyGrid();
+ 
+ checkReward(total);
+ 
 }
 
 function switchTab(n){
@@ -1250,6 +1321,13 @@ function loadData(){
    "customMinusMobile"
   ) || "[]"
  );
+ 
+ rewardShownWeeks = JSON.parse(
+ localStorage.getItem(
+  "rewardShownWeeks"
+ ) || "{}"
+);
+ 
 }
 
 window.onload = ()=>{
@@ -1324,7 +1402,53 @@ function clearAllData(){
  location.reload();
 }
 
+function checkReward(total){
 
+ if(total < 25) return;
+
+ if(rewardShownWeeks[currentWeekKey]) return;
+
+ rewardShownWeeks[currentWeekKey] = true;
+
+ localStorage.setItem(
+  "rewardShownWeeks",
+  JSON.stringify(rewardShownWeeks)
+ );
+
+ const div = document.createElement("div");
+
+ div.className = "reward-mask";
+
+ div.innerHTML = `
+  <div class="reward-box">
+
+   <div class="reward-emoji">
+	🎉
+   </div>
+
+   <div class="reward-title">
+	恭喜完成任务！
+   </div>
+
+   <div class="reward-text">
+	本周积分已达到 <b>25分</b><br>
+	成功获得周末奖励～
+   </div>
+
+   <button class="reward-btn">
+	开心收下
+   </button>
+
+  </div>
+ `;
+
+ document.body.appendChild(div);
+
+ div.querySelector("button").onclick = ()=>{
+
+  div.remove();
+ };
+}
 
 </script>
 </body>
