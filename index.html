@@ -501,30 +501,50 @@ let currentViewingWeek = "";
 
 /* 默认项目 */
 const defaultAdd = [
- {id:1,name:"早上按时起床",points:1},
- {id:2,name:"按时吃饭晨读",points:1},
- {id:3,name:"上学不迟到",points:0.5},
- {id:4,name:"主动做作业",points:2},
- {id:5,name:"好好说话",points:1},
- {id:6,name:"完成运动作业",points:1},
- {id:7,name:"文明讲话",points:1},
- {id:8,name:"阅读20分钟",points:2},
- {id:9,name:"认真听讲",points:2},
- {id:10,name:"整理物品",points:1},
- {id:11,name:"按时睡觉",points:1},
- {id:12,name:"主动打招呼",points:1},
- {id:13,name:"帮忙做家务",points:1}
+
+ {id:1,name:"早上按时起床，响铃10分钟内穿好衣服。5分钟内洗脸、刷牙、上厕所",points:1},
+
+ {id:2,name:"15分钟吃完饭，不拖拉，规定时间内晨读",points:1},
+
+ {id:3,name:"上学不迟到，不磨蹭",points:0.5},
+
+ {id:4,name:"放学主动做作业，规定时间内完成作业，字迹工整，作业书写认真，并整理好书包",points:2},
+
+ {id:5,name:"跟大人好好说话，不急不躁",points:1},
+
+ {id:6,name:"主动打卡完成老师布置的运动作业",points:1},
+
+ {id:7,name:"文明讲讲话（不管在哪个场所），不说脏话",points:1},
+
+ {id:8,name:"每天坚持阅读20分钟",points:2},
+
+ {id:9,name:"上课专心认真听讲，不被老师时常批评（每周）",points:2},
+
+ {id:10,name:"不乱丢乱放，自己的玩具、书包、课本整理好",points:1},
+
+ {id:11,name:"晚上9:30准时上床睡觉",points:1},
+
+ {id:12,name:"出去跟人打招呼，文明大方，有礼貌讲话",points:1},
+
+ {id:13,name:"主动帮忙做家务",points:1}
+
 ];
 
 const defaultMinus = [
- {id:1,name:"起床拖拉",points:-2},
- {id:2,name:"不主动写作业",points:-3},
- {id:3,name:"乱丢乱放",points:-2},
- {id:4,name:"被老师批评",points:-3},
- {id:5,name:"讲脏话",points:-1},
- {id:6,name:"作业未完成",points:-3}
-];
 
+ {id:1,name:"早上起床拖拉，磨蹭，响铃15分钟未完成穿衣洗漱等事情",points:-2},
+
+ {id:2,name:"放学回家不主动及时完成作业，做作业玩耍磨蹭",points:-3},
+
+ {id:3,name:"书包用完不放回原位，乱丢乱放",points:-2},
+
+ {id:4,name:"被老师因贪玩等批评表现不好",points:-3},
+
+ {id:5,name:"不文明讲话，讲脏话",points:-1},
+
+ {id:6,name:"周末作业必须在周天下午6点前完成所有作业",points:-3}
+
+];
 function getTodayKey(){
 
  return new Date().toLocaleDateString('sv-SE');
